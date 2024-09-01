@@ -1,10 +1,10 @@
 "use client";
-import { UseFormReturn, useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import Finput from "@/components/Finput";
 import Fswitch from "@/components/Fswitch";
@@ -16,6 +16,7 @@ import Rinput from "@/components/Rinput";
 import Rselect from "@/components/Rselect";
 import RmultiSelect from "@/components/RmultiSelect";
 import Rswitch from "@/components/Rswitch";
+import autoAnimate from '@formkit/auto-animate'
 
 import LeftSideBar from "@/components/LeftSideBar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -65,6 +66,7 @@ const data: dataType[] = [
     max: 3,
   },
 ];
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 const Home = () => {
   const baseSchema = z.object({});
@@ -72,7 +74,15 @@ const Home = () => {
   const [formSchema, setFormSchema] = useState(z.object({}));
   const [fields, setFields] = useState<dataType[]>(data);
   const [tab, setTab] = useState("all");
+  const listRef = useRef<HTMLFormElement>(null);
+  const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
   type formSchemaType = z.infer<typeof formSchema>;
+
+  useEffect(() => {
+    if (listRef.current) {
+      autoAnimate(listRef.current);
+    }
+  }, [fields]);
 
   const form = useForm<formSchemaType>({
     resolver: zodResolver(formSchema),
@@ -201,12 +211,9 @@ const Home = () => {
     setFields(fields.filter((_, i) => i !== index));
   };
   const moveFieldUp = (index: number) => {
-    console.log(formSchema);
-    
     if (index > 0) {
       setFields((prevFields) => {
         const newFields = [...prevFields];
-        // Swap the current field with the one above it
         [newFields[index - 1], newFields[index]] = [
           newFields[index],
           newFields[index - 1],
@@ -219,7 +226,6 @@ const Home = () => {
     if (index < fields.length - 1) {
       setFields((prevFields) => {
         const newFields = [...prevFields];
-        // Swap the current field with the one below it
         [newFields[index + 1], newFields[index]] = [
           newFields[index],
           newFields[index + 1],
@@ -230,9 +236,6 @@ const Home = () => {
   };
   const handleCode = () => {
     const code = generateFormCode(fields);
-    console.log("formschema");
-
-    console.log(code);
     setGeneratedCode(code);
   };
 
@@ -240,21 +243,21 @@ const Home = () => {
     e: dataType,
     index: number,
     form: UseFormReturn,
-    formSchemaType: any
   ) => {
     const fieldControl = (
       <>
         <Button
-          className="m-0 p-0"
+          className="m-0 p-0 rounded-none h-5 w-5"
           variant="secondary"
           size="icon"
           type="button"
           onClick={() => moveFieldUp(index)}
+          
         >
           <ChevronUp />
         </Button>
         <Button
-          className="m-0 p-0"
+          className="m-0 p-0 rounded-none h-5 w-5"
           variant="secondary"
           size="icon"
           type="button"
@@ -263,7 +266,7 @@ const Home = () => {
           <ChevronDown />
         </Button>
         <Button
-          className="m-0 p-0"
+          className="m-0 p-0 rounded-none h-5 w-5"
           variant="secondary"
           size="icon"
           type="button"
@@ -277,7 +280,7 @@ const Home = () => {
     switch (e.kind) {
       case "input":
         return (
-          <div key={index} className="flex justify-between items-center">
+          <div key={e.name} className="flex justify-between items-center">
             <FormField
               control={form.control}
               name={e.name as keyof formSchemaType}
@@ -291,7 +294,7 @@ const Home = () => {
 
       case "switch":
         return (
-          <div key={index} className="flex justify-between items-center">
+          <div key={e.name} className="flex justify-between items-center">
             <FormField
               control={form.control}
               name={e.name as keyof formSchemaType}
@@ -303,7 +306,7 @@ const Home = () => {
 
       case "select":
         return (
-          <div key={index} className="flex justify-between items-center">
+          <div key={e.name} className="flex justify-between items-center">
             <FormField
               control={form.control}
               name={e.name as keyof formSchemaType}
@@ -315,7 +318,7 @@ const Home = () => {
 
       case "multiSelect":
         return (
-          <div key={index} className="flex justify-between items-center">
+          <div key={e.name} className="flex justify-between items-center">
             <FormField
               control={form.control}
               name={e.name as keyof formSchemaType}
@@ -349,6 +352,7 @@ const Home = () => {
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="flex flex-col gap-5 px-5 h-full"
+                ref={parent}
               >
                 {fields.map((e, index) =>
                   getCorrectField(e, index, form, formSchema)
@@ -358,7 +362,7 @@ const Home = () => {
             </Form>
           </TabsContent>
           <TabsContent value="Code" className="h-full ">
-          <Button
+            <Button
               onClick={() => {
                 navigator.clipboard.writeText("npx shadcn@latest add form input checkbox select switch");
                 toast({
