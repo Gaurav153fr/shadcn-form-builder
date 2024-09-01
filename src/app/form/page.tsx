@@ -16,7 +16,7 @@ import Rinput from "@/components/Rinput";
 import Rselect from "@/components/Rselect";
 import RmultiSelect from "@/components/RmultiSelect";
 import Rswitch from "@/components/Rswitch";
-import autoAnimate from '@formkit/auto-animate'
+import autoAnimate from "@formkit/auto-animate";
 
 import LeftSideBar from "@/components/LeftSideBar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -66,7 +66,7 @@ const data: dataType[] = [
     max: 3,
   },
 ];
-import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const Home = () => {
   const baseSchema = z.object({});
@@ -75,7 +75,7 @@ const Home = () => {
   const [fields, setFields] = useState<dataType[]>(data);
   const [tab, setTab] = useState("all");
   const listRef = useRef<HTMLFormElement>(null);
-  const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
+  const [parent, enableAnimations] = useAutoAnimate(/* optional config */);
   type formSchemaType = z.infer<typeof formSchema>;
 
   useEffect(() => {
@@ -239,11 +239,7 @@ const Home = () => {
     setGeneratedCode(code);
   };
 
-  const getCorrectField = (
-    e: dataType,
-    index: number,
-    form: UseFormReturn,
-  ) => {
+  const getCorrectField = (e: dataType, index: number, form: UseFormReturn) => {
     const fieldControl = (
       <>
         <Button
@@ -252,7 +248,6 @@ const Home = () => {
           size="icon"
           type="button"
           onClick={() => moveFieldUp(index)}
-          
         >
           <ChevronUp />
         </Button>
@@ -354,42 +349,47 @@ const Home = () => {
                 className="flex flex-col gap-5 px-5 h-full"
                 ref={parent}
               >
-                {fields.map((e, index) =>
-                  getCorrectField(e, index, form, formSchema)
-                )}
+                {fields.map((e, index) => getCorrectField(e, index, form))}
                 <Button type="submit">Submit</Button>
               </form>
             </Form>
           </TabsContent>
-          <TabsContent value="Code" className="h-full ">
-            <Button
-              onClick={() => {
-                navigator.clipboard.writeText("npx shadcn@latest add form input checkbox select switch");
-                toast({
-                  title: "Copied!",
-                  description: "Code has been copied to clipboard.",
-                  variant: "default",
-                });
-              }}
-            >
-              <ClipboardList />
-            </Button>
-            <pre className="code-preview text-wrap text-sm my-10 bg-slate-900 p-2 ">
-              <code>npx shadcn@latest add form input checkbox select switch</code>
+          <TabsContent value="Code" className="h-full">
+            <pre className=" text-wrap text-sm my-10  p-2 flex justify-between items-center bg-muted rounded-md mx-2 ">
+              <code>
+                npx shadcn@latest add form input checkbox select switch{" "}
+              </code>
+              <Button
+                className="p-0 m-0 aspect-square  "
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    "npx shadcn@latest add form input checkbox select switch"
+                  );
+                  toast({
+                    title: "Copied!",
+                    description: "Code has been copied to clipboard.",
+                    variant: "default",
+                  });
+                }}
+              >
+                <ClipboardList className="w-5 h-5" />
+              </Button>
             </pre>
-            <Button
-              onClick={() => {
-                navigator.clipboard.writeText(generatedCode);
-                toast({
-                  title: "Copied!",
-                  description: "Code has been copied to clipboard.",
-                  variant: "default",
-                });
-              }}
-            >
-              <ClipboardList />
-            </Button>
-            <pre className="code-preview text-wrap text-sm  ">
+
+            <pre className="code-preview text-wrap text-sm relative bg-muted m-2 rounded-md px-2">
+              <Button
+                className="p-0 m-0 aspect-square  absolute top-3 right-3"
+                onClick={() => {
+                  navigator.clipboard.writeText(generatedCode);
+                  toast({
+                    title: "Copied!",
+                    description: "Code has been copied to clipboard.",
+                    variant: "default",
+                  });
+                }}
+              >
+                <ClipboardList />
+              </Button>
               <code>{generatedCode}</code>
             </pre>
           </TabsContent>
