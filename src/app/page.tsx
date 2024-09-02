@@ -21,7 +21,7 @@ export default function Home() {
       
       
       </div>
-        <div className="max-md:w-full h-[600px] bg-gray-100 dark:bg-gray-700 m-0 rounded-[60px] overflow-hidden shadow-xl border-8 border-gray-800 dark:border-gray-600 relative flex flex-col">
+        <div className="w-[300px] h-[600px] bg-gray-100 dark:bg-gray-700 m-0 rounded-[60px] overflow-hidden shadow-xl border-8 border-gray-800 dark:border-gray-600 relative flex flex-col">
           {/* Notch */}
           <div className="absolute top-0 inset-x-0 h-6 bg-black rounded-b-3xl z-10"></div>
 
