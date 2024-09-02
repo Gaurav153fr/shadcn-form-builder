@@ -67,8 +67,11 @@ const data: dataType[] = [
   },
 ];
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useTheme } from "next-themes";
 
 const Home = () => {
+  const { setTheme } = useTheme()
+ setTheme('dark')
   const baseSchema = z.object({});
 
   const [formSchema, setFormSchema] = useState(z.object({}));
@@ -329,7 +332,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex justify-center h-screen  scroll-m-0">
+    <div className="flex justify-center h-screen  scroll-m-0 ">
       <LeftSideBar setTab={setTab} />
 
       <div className="w-2/5  border-x flex h-full  overflow-y-scroll ">

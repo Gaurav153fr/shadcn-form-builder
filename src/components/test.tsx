@@ -41,7 +41,7 @@ const MyForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full m-auto gap-5 h-full bg-background ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-[500px] m-auto gap-5 my-10">
         
 <FormField
   control={form.control}

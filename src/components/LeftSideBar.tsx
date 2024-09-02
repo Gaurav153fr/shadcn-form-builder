@@ -4,7 +4,7 @@ import { Button } from './ui/button'
 
 const LeftSideBar = ({setTab}: {setTab: Dispatch<SetStateAction<string>>}) => {
   return (
-    <div className="flex w-1/5 gap-4 h-screen  bg-slate-900/50 ">
+    <div className="flex w-1/5 gap-4 h-screen  dark:bg-slate-900/50 ">
         <div className="flex w-full flex-col gap-4 rounded-lg  p-4">
           <h2 className="text-xl font-semibold">Add Fields</h2>
           <div className="flex flex-col gap-2">
